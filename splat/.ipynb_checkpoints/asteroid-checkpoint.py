@@ -639,7 +639,7 @@ def spline_fit(spec, wave_range = [0.85, 2.45]):
     x = spec.wave/u.micron
     y = spec.flux
     
-    tck = interpolate.splrep(x, y, s=0.006) # spline prep, parameters to plot the interpolation 
+    tck = interpolate.splrep(x, y, xb = wave_range[0], xe = wave_range[1], k = 3) # spline prep, parameters to plot the interpolation 
     # Side note, not all spectrrum data encompasses 0.45 - 2.45 microns. Default k = 3 (cubic), as in source material
     xnew = np.arange(low_range, high_range, 0.05) # separating the wavelengths into 0.05 micron increments, from 0.85 - 2.45
     ynew = interpolate.splev(xnew, tck, der=0) # using the spline prep, obtain the "best fit" reflectance values
@@ -733,8 +733,7 @@ def form_data_pairs(obj, wave_range = [0.85, 2.45], norm = 1.2):
     Returns
     -------
     tp_list : nested array
-        contains two arrays, the 'wave' of the Spectra object and the 'flux' of some Spectrum object
-        after cubic spline fit and normalizing, with the slope divided out.
+        contains two arrays, the 'wave' of the Spectra object and the 'flux' of some Spectrum object after cubic spline fit and normalizing, with the slope divided out.
     
     tp_slope : float
         slope of the normalized, cubic spline-fitted data obtained through linear regression
